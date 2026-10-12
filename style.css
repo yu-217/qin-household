@@ -75,3 +75,168 @@ button{font:inherit;color:inherit;cursor:pointer}button:disabled{cursor:not-allo
   .choice-main strong{font-size:16px}
   .choice-num{width:26px;flex-basis:26px;height:26px;font-size:11px}
 }
+
+
+/* ================================================
+   V1.6 | 老师确认版：放大步骤、提醒、字段文字
+   直接追加在旧 style.css 最后即可覆盖旧规则。
+   ================================================ */
+/* 开卷 → 择项 → 成籍：实际 DOM 是 span + em，不是 .step + .arrow */
+.archive-steps.arrow-steps{
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+  gap:8px;
+  min-height:104px;
+  margin:2px 0 18px;
+  padding:15px 16px;
+  border:1.5px solid #a9c3d1;
+  border-radius:20px;
+  background:#edf5f9;
+}
+.archive-steps.arrow-steps span{
+  flex:0 1 auto;
+  min-width:112px;
+  padding:14px 12px;
+  text-align:center;
+  font-size:24px;
+  font-weight:600;
+  line-height:1.35;
+  white-space:nowrap;
+  border:0;
+  border-radius:18px;
+  box-shadow:none;
+  color:#6b8798;
+  background:transparent;
+}
+.archive-steps.arrow-steps span.done{color:#46697d}
+.archive-steps.arrow-steps span.active{
+  min-width:137px;
+  padding:15px 17px;
+  border:2px solid #91b3c5;
+  border-radius:999px;
+  background:#d6e8f2;
+  color:#23465c;
+  font-weight:700;
+  box-shadow:0 2px 6px #304f6114;
+}
+.archive-steps.arrow-steps em{
+  flex:0 0 auto;
+  color:#466d85;
+  font-size:32px;
+  font-style:normal;
+  font-weight:700;
+  line-height:1;
+}
+/* 录 · 至少选三项：放在选项前，文字更醒目 */
+.selected-preview.top-reminder{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:76px;
+  padding:15px 17px;
+  margin:0 0 20px;
+  background:#e6f1f6;
+  border:1.5px solid #a9c4d1;
+  border-radius:16px;
+  color:#2c4d61;
+  font-size:19px;
+  font-weight:600;
+  line-height:1.55;
+}
+.top-reminder .small-seal{
+  width:37px;
+  height:37px;
+  flex:0 0 37px;
+  border:1.5px solid #62889e;
+  border-radius:8px;
+  font-size:23px;
+  font-weight:600;
+  color:#31576c;
+  background:#eff7fa;
+}
+.top-reminder .selected-progress{
+  margin-left:auto;
+  flex:0 0 auto;
+  font-size:13px;
+  letter-spacing:1px;
+  color:#6d91a4;
+}
+/* 六项字段：去序号、放大字段、适当收紧卡片高度 */
+.options-grid{gap:13px}
+.choice{
+  align-items:center;
+  min-height:94px;
+  padding:17px 18px;
+  gap:12px;
+  border:1.5px solid #aec6d2;
+  border-radius:18px;
+  background:#f9fcfd;
+}
+.choice.on{
+  border-color:#54839d;
+  background:#deedf5;
+  box-shadow:inset 0 0 0 1px #95bbc9;
+}
+.choice-num{display:none!important}
+.choice-main{display:flex;align-items:center;min-height:46px;min-width:0}
+.choice-main strong{
+  display:block;
+  font-size:23px;
+  font-weight:700;
+  letter-spacing:.3px;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.choice-main small{display:none!important}
+.choice-check{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  border-radius:11px;
+  font-size:24px;
+}
+@media(max-width:480px){
+  .archive-steps.arrow-steps{
+    gap:3px;
+    min-height:80px;
+    padding:10px 7px;
+    border-radius:15px;
+  }
+  .archive-steps.arrow-steps span{
+    min-width:0;
+    padding:10px 5px;
+    font-size:18px;
+    border-radius:14px;
+  }
+  .archive-steps.arrow-steps span.active{
+    min-width:0;
+    padding:11px 9px;
+    border-radius:999px;
+  }
+  .archive-steps.arrow-steps em{font-size:25px}
+  .selected-preview.top-reminder{
+    min-height:67px;
+    gap:9px;
+    padding:12px;
+    margin-bottom:16px;
+    font-size:16px;
+  }
+  .top-reminder .small-seal{
+    width:31px;height:31px;flex-basis:31px;font-size:19px
+  }
+  .top-reminder .selected-progress{font-size:11px;letter-spacing:0}
+  .options-grid{gap:9px}
+  .choice{min-height:91px;padding:13px 12px;gap:7px;border-radius:15px}
+  .choice-main{min-height:44px}
+  .choice-main strong{font-size:19px}
+  .choice-check{width:29px;height:29px;flex-basis:29px;font-size:20px}
+}
+@media(max-width:355px){
+  .archive-steps.arrow-steps span{font-size:16px;padding:9px 3px}
+  .archive-steps.arrow-steps span.active{padding:9px 6px}
+  .archive-steps.arrow-steps em{font-size:22px}
+  .selected-preview.top-reminder{font-size:15px;gap:7px}
+  .top-reminder .selected-progress{display:none}
+  .choice-main strong{font-size:17px}
+}
