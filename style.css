@@ -40,3 +40,38 @@ button{font:inherit;color:inherit;cursor:pointer}button:disabled{cursor:not-allo
 
 .result-tools .subbutton:last-child{grid-column:1/-1}
 .result-summary:has(span:only-child){justify-content:center}
+
+
+/* V1.5 老师反馈界面优化 */
+.era{border-radius:10px;min-height:92px;padding:16px 15px;transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease}
+.era.available.featured{border:2px solid #3f6e88;background:linear-gradient(135deg,#e6f2f8 0%,#d8eaf3 100%);box-shadow:0 4px 14px rgba(53,95,117,.10), inset 5px 0 0 #315d76}
+.era.available.featured .era-info strong,.era.available.featured .era-state,.era.available.featured .era-icon{color:#24495e}
+.era.available.featured .era-icon{background:#dcebf3;border-color:#7ba0b5}
+.era.locked{background:#f3f7f9;border-color:#c7d5dc;opacity:1}
+.era.locked .era-icon,.era.locked .era-info strong,.era.locked .era-state{color:#9aabb4}
+.era-info small{display:none}
+.archive-steps.arrow-steps{display:flex;align-items:center;justify-content:center;gap:10px;padding:0 8px;background:#f2f7fa;border-radius:12px;min-height:54px}
+.archive-steps.arrow-steps span{border-right:0;flex:0 1 auto;min-width:84px;padding:10px 14px;border-radius:999px;background:transparent}
+.archive-steps.arrow-steps em{font-style:normal;color:#7b95a3;font-size:18px;line-height:1}
+.archive-steps.arrow-steps .active{box-shadow:none;background:#dcebf2;border:1px solid #9fb8c6;color:#234e67}
+.archive-steps.arrow-steps .done{color:#587c8f}
+.top-reminder{margin-bottom:14px;border-radius:14px;background:#eef5f8;border:1px solid #c8d8e1}
+.choice{border-radius:18px;min-height:98px;padding:16px 14px 15px 14px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset}
+.choice-main{display:flex;align-items:center;min-height:52px}
+.choice-main strong{font-size:18px}
+.choice-main small{display:none!important}
+.choice-num{display:grid;place-items:center;width:30px;flex:0 0 30px;height:30px;border-radius:999px;border:1px solid #b8cad4;background:#f5fafc;color:#698696;font-size:12px;margin-top:2px}
+.choice-check{border-radius:12px;width:28px;height:28px;flex:0 0 28px;font-size:18px;background:#f7fbfc}
+.choice.on .choice-check{background:#365f75;color:#fff}
+.toolbar{margin-top:12px}
+.mainbutton{border-radius:14px}
+.subbutton{border-radius:12px}
+.selected-progress{letter-spacing:2px}
+@media(max-width:410px){
+  .archive-steps.arrow-steps{gap:6px;padding:0 4px;min-height:48px}
+  .archive-steps.arrow-steps span{min-width:auto;padding:8px 10px;font-size:12px}
+  .archive-steps.arrow-steps em{font-size:16px}
+  .choice{border-radius:16px;padding:14px 11px}
+  .choice-main strong{font-size:16px}
+  .choice-num{width:26px;flex-basis:26px;height:26px;font-size:11px}
+}
