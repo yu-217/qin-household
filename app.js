@@ -8,7 +8,7 @@ const state={page:'home',selected:new Set(),slot:null,allCases:window.QIN_CASES|
 const html=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const current=()=>state.slot?state.allCases[state.slot-1]:null;
 const toast=s=>{toastNode.textContent=s;toastNode.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastNode.classList.remove('show'),2600)};
-const heading=()=>`<header class="site-head" role="banner"><span class="head-watermark" aria-hidden="true">秦</span><span class="head-seal" aria-hidden="true">籍</span><h1>户籍档案馆</h1></header>`;
+const heading=()=>`<header class="site-head" role="banner"><span class="head-watermark" aria-hidden="true">秦</span><span class="head-seal" aria-hidden="true">籍</span><h1>中国古代户籍档案馆</h1></header>`;
 function home(){
  return `<section class="screen home-screen">${heading()}<div class="dynasty-list" aria-label="选择朝代">${eras.map(e=>`<button class="dynasty ${e.enabled?'dynasty-qin':'dynasty-disabled'}" data-action="${e.enabled?'qin':'none'}" ${e.enabled?'':'disabled'}><strong>${e.name}</strong></button>`).join('')}</div></section>`;
 }
