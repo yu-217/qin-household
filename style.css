@@ -9,9 +9,40 @@ button:focus-visible{outline:3px solid #568aa6;outline-offset:2px}
 button:disabled{cursor:default}
 .app{width:100%;max-width:625px;margin:0 auto;height:100vh;height:100dvh;min-height:0;overflow:hidden;background:#f8fbfd;box-shadow:0 0 36px #24485918}
 .screen{height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-/* 首页：只保留居中标题与五个朝代 */
-.site-head{flex:0 0 auto;display:flex;align-items:center;justify-content:center;height:clamp(78px,16dvh,118px);background:linear-gradient(120deg,#243d4f,#30536a);border-bottom:4px solid #8fb5c7;padding:12px}
-.site-head h1{font-size:clamp(25px,5.6vw,36px);font-weight:700;line-height:1.25;letter-spacing:2px;text-align:center;color:#fff;margin:0}
+/* V1.8：恢复史馆原版 Banner 质感，仅保留居中的“户籍档案馆” */
+.site-head{
+  flex:0 0 auto;position:relative;isolation:isolate;overflow:hidden;
+  display:flex;justify-content:center;align-items:center;
+  height:clamp(98px,16.5dvh,154px);
+  padding:10px 55px;
+  border-bottom:5px double #8fb4c6;
+  background:linear-gradient(115deg,#263f50 0%,#304f61 100%);
+}
+.site-head::before{
+  content:'';position:absolute;inset:12px 15px 13px;
+  border:1px solid rgba(211,229,236,.20);pointer-events:none;z-index:-1;
+}
+.site-head h1{
+  position:relative;z-index:2;margin:0;text-align:center;
+  font-size:clamp(30px,7vw,47px);line-height:1.23;
+  letter-spacing:3px;font-weight:700;color:#f5f9fb;
+  text-shadow:0 1px 0 rgba(9,35,51,.15);
+}
+.head-watermark{
+  position:absolute;z-index:0;top:-74px;right:-5px;
+  color:rgba(219,235,244,.08);font-size:222px;line-height:1;
+  font-weight:700;pointer-events:none;user-select:none;
+}
+.head-seal{
+  position:absolute;z-index:1;right:clamp(22px,5.5vw,40px);top:50%;
+  width:clamp(41px,7vw,58px);height:clamp(41px,7vw,58px);
+  transform:translateY(-50%) rotate(-7deg);
+  display:grid;place-items:center;
+  border:2px solid #b3d0df;
+  box-shadow:inset 0 0 0 3px #294657,inset 0 0 0 4px #b3d0df;
+  color:#d5eaf3;font-size:clamp(25px,4.8vw,37px);font-weight:700;
+}
+/* 6列固定仍维持上一版一屏适配，header占用高度由列表自动收缩 */
 .dynasty-list{flex:1;min-height:0;display:grid;grid-template-rows:1.16fr repeat(4,1fr);gap:clamp(7px,1.3dvh,13px);padding:clamp(14px,2.7dvh,25px) clamp(15px,4vw,29px);overflow:hidden}
 .dynasty{display:flex;align-items:center;justify-content:center;min-height:0;border:1px solid #c7d7df;border-radius:14px;background:#f1f6f8}
 .dynasty strong{font-size:clamp(20px,4.8vw,25px);font-weight:600;letter-spacing:3px}
@@ -41,7 +72,7 @@ button:disabled{cursor:default}
 .toast{z-index:30;position:fixed;left:50%;bottom:9dvh;transform:translateX(-50%);width:max-content;max-width:85vw;border-radius:8px;background:#253e4ced;color:#fff;padding:10px 14px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .15s}
 .toast.show{opacity:1}
 @media(max-height:620px){
- .site-head{height:78px}
+ .site-head{height:98px}
  .dynasty-list{padding:10px 14px;gap:7px}
  .choose-screen{gap:7px;padding-top:8px;padding-bottom:8px}
  .choose-notice{height:48px}
@@ -52,8 +83,10 @@ button:disabled{cursor:default}
  .return-home{min-height:23px}
 }
 @media(max-height:460px){
- .site-head{height:53px}
- .site-head h1{font-size:24px}
+ .site-head{height:65px;padding-left:48px;padding-right:48px}
+ .site-head h1{font-size:24px;letter-spacing:1px}
+ .head-watermark{top:-42px;font-size:125px}
+ .head-seal{width:30px;height:30px;font-size:19px;right:21px}
  .dynasty-list{padding:6px 12px;gap:4px}
  .dynasty strong{font-size:18px}
  .dynasty-qin strong{font-size:23px}
@@ -71,3 +104,10 @@ button:disabled{cursor:default}
 /* 户籍卡预览区留白透明化，突出卡片本体 */
 .card-preview{background:transparent;border:none;padding:0}
 .result-image{box-shadow:0 2px 11px #2c516217;border:1px solid #b4ccd8;background:#e1edf3}
+
+@media(max-width:380px){
+ .site-head{padding-left:47px;padding-right:47px}
+ .site-head h1{font-size:clamp(25px,7vw,32px);letter-spacing:2px}
+ .head-seal{right:20px;width:35px;height:35px;font-size:23px}
+ .head-watermark{right:-13px}
+}

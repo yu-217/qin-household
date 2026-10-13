@@ -8,15 +8,15 @@ const state={page:'home',selected:new Set(),slot:null,allCases:window.QIN_CASES|
 const html=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const current=()=>state.slot?state.allCases[state.slot-1]:null;
 const toast=s=>{toastNode.textContent=s;toastNode.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastNode.classList.remove('show'),2600)};
-const heading=()=>`<header class="site-head"><h1>历代户籍档案馆</h1></header>`;
+const heading=()=>`<header class="site-head" role="banner"><span class="head-watermark" aria-hidden="true">秦</span><span class="head-seal" aria-hidden="true">籍</span><h1>户籍档案馆</h1></header>`;
 function home(){
  return `<section class="screen home-screen">${heading()}<div class="dynasty-list" aria-label="选择朝代">${eras.map(e=>`<button class="dynasty ${e.enabled?'dynasty-qin':'dynasty-disabled'}" data-action="${e.enabled?'qin':'none'}" ${e.enabled?'':'disabled'}><strong>${e.name}</strong></button>`).join('')}</div></section>`;
 }
 function editor(){
- return `<section class="screen choose-screen"><div class="choose-notice"><button class="back-icon" data-action="home" aria-label="返回首页">‹</button><strong>至少选三项，便可成卷</strong></div><div class="field-list" role="group" aria-label="选择户籍栏目">${sections.map(s=>{const on=state.selected.has(s.id);return `<button class="field-choice ${on?'is-checked':''}" data-action="toggle" data-id="${s.id}" aria-pressed="${on}"><span class="square-check" aria-hidden="true">${on?'✓':''}</span><span class="field-name">${s.label}</span></button>`}).join('')}</div><button class="primary-action" data-action="generate" ${state.selected.size<3?'disabled':''}>生成户籍卡</button></section>`;
+ return `<section class="screen choose-screen">${heading()}<div class="choose-notice"><button class="back-icon" data-action="home" aria-label="返回首页">‹</button><strong>至少选三项，便可成卷</strong></div><div class="field-list" role="group" aria-label="选择户籍栏目">${sections.map(s=>{const on=state.selected.has(s.id);return `<button class="field-choice ${on?'is-checked':''}" data-action="toggle" data-id="${s.id}" aria-pressed="${on}"><span class="square-check" aria-hidden="true">${on?'✓':''}</span><span class="field-name">${s.label}</span></button>`}).join('')}</div><button class="primary-action" data-action="generate" ${state.selected.size<3?'disabled':''}>生成户籍卡</button></section>`;
 }
 function result(){
- return `<section class="screen result-screen"><h2 class="result-heading">秦朝 · 户籍卡</h2><div class="card-preview"><img class="result-image" id="card-image" alt="秦朝教学复原户籍卡，显示所选栏目"></div><button class="primary-action save-action" data-action="save">保存户籍卡</button><button class="return-home" data-action="home">返回首页</button></section>`;
+ return `<section class="screen result-screen">${heading()}<h2 class="result-heading">秦朝 · 户籍卡</h2><div class="card-preview"><img class="result-image" id="card-image" alt="秦朝教学复原户籍卡，显示所选栏目"></div><button class="primary-action save-action" data-action="save">保存户籍卡</button><button class="return-home" data-action="home">返回首页</button></section>`;
 }
 function render(scroll=false){app.innerHTML=state.page==='home'?home():state.page==='edit'?editor():result();if(state.page==='result'&&state.image)document.querySelector('#card-image').src=state.image;if(scroll)scrollTo({top:0,behavior:'instant'});}
 function randomSlot(){
