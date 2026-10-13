@@ -29,38 +29,76 @@ function randomSlot(){
 }
 function openQin(){if(state.allCases.length!==200){toast('案卷数据加载失败');return;}state.slot=randomSlot();state.image=null;state.page='edit';render(true);}
 const put=(ctx,s,x,y,size=27,bold=false,align='left',color='#253f50')=>{ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillStyle=color;ctx.font=`${bold?'bold ':''}${size}px "Noto Serif CJK SC","Songti SC","SimSun",serif`;ctx.fillText(String(s),x,y)};
-function makeImage(){const ex=current();if(!ex)throw Error('暂无分配的案卷');const sel=state.selected;
- const W=1100,pad=38,w=W-2*pad,labelW=240,titleH=110,rowH=86,famHeader=98,memberH=82,famRows=6,familyH=famHeader+famRows*memberH,clanH=84,footH=100,marginBottom=38;
- const H=2*pad+titleH+4*rowH+familyH+clanH+footH+marginBottom;const c=document.createElement('canvas');c.width=W;c.height=H;const ctx=c.getContext('2d');if(!ctx)throw Error('浏览器不支持 Canvas');
- ctx.fillStyle='#eef5f8';ctx.fillRect(0,0,W,H);ctx.fillStyle='#e1edf3';ctx.fillRect(pad,pad,w,H-2*pad-marginBottom);
+function makeImage(){
+ const ex=current();
+ if(!ex)throw Error('暂无分配的案卷');
+ const sel=state.selected;
+ // 只绘制学生选中的栏目；未选栏目在图片中完全不存在。
+ const allFieldRows=[
+  ['name','户主姓名',ex.name],
+  ['rank','爵位',ex.rank],
+  ['place','籍贯（里）',ex.place],
+  ['assets','家庭资产',ex.assets]
+ ];
+ const fieldRows=allFieldRows.filter(([id])=>sel.has(id));
+ const showFamily=sel.has('family');
+ const showClan=sel.has('clan');
+ const members=showFamily?ex.members.slice(0,6):[];
+ const W=1100,pad=38,w=W-2*pad,labelW=240,titleH=110,rowH=86;
+ const famHeader=98,memberH=82,famRows=members.length;
+ const familyH=showFamily?(famHeader+famRows*memberH):0;
+ const clanH=showClan?84:0,footH=100,marginBottom=38;
+ const H=2*pad+titleH+fieldRows.length*rowH+familyH+clanH+footH+marginBottom;
+ const c=document.createElement('canvas');c.width=W;c.height=H;
+ const ctx=c.getContext('2d');if(!ctx)throw Error('浏览器不支持 Canvas');
+ ctx.fillStyle='#eef5f8';ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='#e1edf3';ctx.fillRect(pad,pad,w,H-2*pad-marginBottom);
  const x=pad,r=W-pad;let y=pad;
  const rule=(a,b,aa,bb,line=2)=>{ctx.strokeStyle='#425969';ctx.lineWidth=line;ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(aa,bb);ctx.stroke()};
- ctx.fillStyle='#305269';ctx.fillRect(x,y,w,7);ctx.fillStyle='#94adbd';ctx.fillRect(x+12,y+14,w-24,2);ctx.strokeStyle='#425969';ctx.lineWidth=3;ctx.strokeRect(x,y,w,H-2*pad-marginBottom);
- put(ctx,'秦朝 · 户籍卡',W/2,y+titleH/2+4,52,true,'center');let cur=y+titleH;rule(x,cur,r,cur);
- const fieldRows=[['name','户主姓名',ex.name],['rank','爵位',ex.rank],['place','籍贯（里）',ex.place],['assets','家庭资产',ex.assets]];
- fieldRows.forEach(([id,label,value])=>{rule(x+labelW,cur,x+labelW,cur+rowH);put(ctx,label,x+18,cur+rowH/2,29,true);if(sel.has(id))fit(ctx,value,x+labelW+16,cur+rowH/2,w-labelW-35);cur+=rowH;rule(x,cur,r,cur)});
- const fy=cur,partW=220,workW=200,officialW=180,rankW=w-labelW-partW-workW-officialW;
- const xx=[x,x+labelW,x+labelW+partW,x+labelW+partW+workW,x+labelW+partW+workW+officialW,r];
- for(const vx of xx.slice(1,-1))rule(vx,fy,vx,fy+familyH);
- rule(xx[1],fy+famHeader,r,fy+famHeader);
- for(let i=1;i<=famRows;i++)rule(xx[1],fy+famHeader+memberH*i,r,fy+famHeader+memberH*i);
- put(ctx,'家庭成员',x+labelW/2,fy+familyH/2,30,true,'center');
- put(ctx,'关系／姓名',xx[1]+partW/2,fy+famHeader/2,25,true,'center');
- put(ctx,'课役身份',xx[2]+workW/2,fy+famHeader/2,25,true,'center');
- put(ctx,'基层职务',xx[3]+officialW/2,fy+famHeader/2,24,true,'center');
- put(ctx,'爵位',xx[4]+rankW/2,fy+famHeader/2,26,true,'center');
- const members=sel.has('family')?ex.members:[];
- members.slice(0,6).forEach((m,i)=>{const cy=fy+famHeader+memberH*(i+.5);
-   put(ctx,m.relation+' · '+m.name,xx[1]+partW/2,cy,24,false,'center');
-   if(m.service)put(ctx,m.service,xx[2]+workW/2,cy,24,false,'center');
-   if(m.office)put(ctx,m.office,xx[3]+officialW/2,cy,23,false,'center');
-   if(m.rank)put(ctx,m.rank,xx[4]+rankW/2,cy,24,false,'center');
- });cur=fy+familyH;rule(x,cur,r,cur);rule(x+labelW,cur,x+labelW,cur+clanH);
- put(ctx,'宗族',x+18,cur+clanH/2,29,true);if(sel.has('clan'))fit(ctx,ex.clan,x+labelW+16,cur+clanH/2,w-labelW-35);
- cur+=clanH;rule(x,cur,r,cur);ctx.fillStyle='#305269';ctx.fillRect(x+1,cur+1,w-2,footH-2);
+ ctx.fillStyle='#305269';ctx.fillRect(x,y,w,7);
+ ctx.fillStyle='#94adbd';ctx.fillRect(x+12,y+14,w-24,2);
+ ctx.strokeStyle='#425969';ctx.lineWidth=3;
+ ctx.strokeRect(x,y,w,H-2*pad-marginBottom);
+ put(ctx,'秦朝 · 户籍卡',W/2,y+titleH/2+4,52,true,'center');
+ let cur=y+titleH;rule(x,cur,r,cur);
+ fieldRows.forEach(([,label,value])=>{
+   rule(x+labelW,cur,x+labelW,cur+rowH);
+   put(ctx,label,x+18,cur+rowH/2,29,true);
+   fit(ctx,value,x+labelW+16,cur+rowH/2,w-labelW-35);
+   cur+=rowH;rule(x,cur,r,cur);
+ });
+ if(showFamily){
+   const fy=cur,partW=220,workW=200,officialW=180;
+   const rankW=w-labelW-partW-workW-officialW;
+   const xx=[x,x+labelW,x+labelW+partW,x+labelW+partW+workW,x+labelW+partW+workW+officialW,r];
+   for(const vx of xx.slice(1,-1))rule(vx,fy,vx,fy+familyH);
+   rule(xx[1],fy+famHeader,r,fy+famHeader);
+   for(let i=1;i<=famRows;i++)rule(xx[1],fy+famHeader+memberH*i,r,fy+famHeader+memberH*i);
+   put(ctx,'家庭成员',x+labelW/2,fy+familyH/2,30,true,'center');
+   put(ctx,'关系／姓名',xx[1]+partW/2,fy+famHeader/2,25,true,'center');
+   put(ctx,'课役身份',xx[2]+workW/2,fy+famHeader/2,25,true,'center');
+   put(ctx,'基层职务',xx[3]+officialW/2,fy+famHeader/2,24,true,'center');
+   put(ctx,'爵位',xx[4]+rankW/2,fy+famHeader/2,26,true,'center');
+   members.forEach((m,i)=>{
+     const cy=fy+famHeader+memberH*(i+.5);
+     put(ctx,m.relation+' · '+m.name,xx[1]+partW/2,cy,24,false,'center');
+     if(m.service)put(ctx,m.service,xx[2]+workW/2,cy,24,false,'center');
+     if(m.office)put(ctx,m.office,xx[3]+officialW/2,cy,23,false,'center');
+     if(m.rank)put(ctx,m.rank,xx[4]+rankW/2,cy,24,false,'center');
+   });
+   cur+=familyH;rule(x,cur,r,cur);
+ }
+ if(showClan){
+   rule(x+labelW,cur,x+labelW,cur+clanH);
+   put(ctx,'宗族',x+18,cur+clanH/2,29,true);
+   fit(ctx,ex.clan,x+labelW+16,cur+clanH/2,w-labelW-35);
+   cur+=clanH;rule(x,cur,r,cur);
+ }
+ ctx.fillStyle='#305269';ctx.fillRect(x+1,cur+1,w-2,footH-2);
  put(ctx,'史馆簿籍　·　秦代户籍',x+15,cur+30,23,false,'left','#e7f1f5');
  put(ctx,'史料参照：里耶秦简　｜　教学复原，非出土原件',x+15,cur+67,20,false,'left','#d2e5ee');
- return c.toDataURL('image/png');}
+ return c.toDataURL('image/png');
+}
  function fit(ctx,v,x,y,max){let size=28;ctx.font=`${size}px "Songti SC",serif`;while(ctx.measureText(v).width>max && size>17){size-=1;ctx.font=`${size}px "Songti SC",serif`;}put(ctx,v,x,y,size);}
  function generate(){if(state.selected.size<3){toast('至少选择三项');return;}if(!current()){toast('请先领取案卷');return;}try{state.image=makeImage();state.page='result';render(true)}catch(e){console.error(e);toast('生成失败，请再试一次');}}
  function save(){if(!state.image)return;const a=document.createElement('a');a.href=state.image;a.download=`秦朝户籍卡_${current().name}.png`;a.style.display='none';document.body.appendChild(a);a.click();a.remove();toast('若微信内未下载，请长按图片保存');}
